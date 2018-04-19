@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lxk.base.Result;
+import com.lxk.could.qiniu.QiNiuUtils;
 import com.lxk.could.qiniu.UploadStatus;
 import com.lxk.util.Exception;
 import com.lxk.util.FileUtil;
-import com.lxk.util.QiNiuUtils;
 import com.lxk.util.ResultUtil;
 import com.tontisa.common.lang.Dates;
 import com.tontisa.common.lang.Strings;

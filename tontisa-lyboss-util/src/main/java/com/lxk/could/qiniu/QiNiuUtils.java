@@ -1,4 +1,4 @@
-package com.lxk.util;
+package com.lxk.could.qiniu;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import com.lxk.config.Config;
-import com.lxk.could.qiniu.UploadStatus;
+import com.lxk.util.Exception;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
 import com.qiniu.storage.Configuration;
