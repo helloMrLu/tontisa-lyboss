@@ -82,6 +82,9 @@ public class QiNiuUtils {
 		Configuration cfg=new Configuration(Zone.zone0());
 		UploadManager uploadManager=new UploadManager(cfg);
 		String token = createUploadToKen(bucket, key, null, null);
+		if(Strings.isEmpty(token)){
+			throw Exception.makeServiceException("20011");
+		}
 		try {
 			uploadManager.put(filedata,key,token);
 			return UploadStatus.SUCCESS;

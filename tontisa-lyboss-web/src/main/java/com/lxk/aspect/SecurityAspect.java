@@ -45,7 +45,7 @@ public class SecurityAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         System.out.println("111111111111111111111111111112");
-       /* //查询cookie
+        //查询cookie
         Cookie cookie = CookieUtils.get(request,MagConstant.TOKEN_NAME);
         if (cookie == null) {
             log.warn("【登录校验】Cookie中查不到token");
@@ -60,7 +60,7 @@ public class SecurityAspect {
             log.warn("【登录校验】Redis中查不到token");
             throw Exception.makeServiceException("20007");
         }
-        putUserInfo(tokenValue); */
+        putUserInfo(tokenValue);
     }
 
 	/**
