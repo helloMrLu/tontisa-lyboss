@@ -55,7 +55,8 @@ public class AttachmentController extends BaseController {
 	@ResponseBody
 	public String uploadTest(String bucket,String prefix,Long expired, Map<String,Object> attributes,String path) {
 		if(Strings.isEmpty(path)){
-			path="C:\\Users\\PVer\\Pictures\\Camera Roll\\123.jpg";
+			//path="C:\\Users\\PVer\\Pictures\\Camera Roll\\123.jpg";
+			path="https://cdn.op114.com/compose/2017-11-22/3f3d8d8d81174d5cb680698ad987b200.jpg";
 			//throw Exception.makeServiceException("20009");
 		}
 		if (Strings.isEmpty(bucket)) {
@@ -64,7 +65,7 @@ public class AttachmentController extends BaseController {
 		}
 		byte[] b = null;
 		if(path.contains("http://")||path.contains("https://")){
-			
+			b=FileUtil.url2Byte(path);
 		}else{
 			b=FileUtil.file2Byte(path);
 		}

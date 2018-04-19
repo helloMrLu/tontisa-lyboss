@@ -1,16 +1,11 @@
 package com.lxk.util;
 
-import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import com.lxk.base.Result;
 import com.lxk.config.Config;
 import com.lxk.could.qiniu.UploadStatus;
 import com.qiniu.common.QiniuException;
@@ -20,7 +15,6 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 import com.tontisa.common.collection.Maps;
-import com.tontisa.common.lang.Dates;
 import com.tontisa.common.lang.Strings;
 import com.tontisa.common.lang.Throwables;
 
