@@ -1,5 +1,6 @@
 package com.lxk.could.qiniu;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -10,10 +11,13 @@ import com.lxk.config.Config;
 import com.lxk.util.Exception;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
+import com.qiniu.http.Response;
+import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
+import com.tontisa.common.collection.Lists;
 import com.tontisa.common.collection.Maps;
 import com.tontisa.common.lang.Strings;
 import com.tontisa.common.lang.Throwables;
@@ -25,11 +29,16 @@ import com.tontisa.common.lang.Throwables;
 public class QiNiuUtils {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
-	protected Config config;
-	
+	private Config config;
+	private Auth auth;
+	private Configuration cfg;
+	private UploadManager uploadManager;
+	private BucketManager bucketManager;
 	public QiNiuUtils(Config config) {
 		this.config=config;
+		init(config);
 	}
+	
 	/**
 	 * 获取上传文件token，并设置回调
 	 * 必须是用户登录之后才能调用
@@ -73,8 +82,6 @@ public class QiNiuUtils {
 	 * @return
 	 */
 	public UploadStatus upload(String bucket, String key, byte[] filedata) {
-		Configuration cfg=new Configuration(Zone.zone0());
-		UploadManager uploadManager=new UploadManager(cfg);
 		String token = createUploadToKen(bucket, key, null, null);
 		if(Strings.isEmpty(token)){
 			throw Exception.makeServiceException("20011");
@@ -124,7 +131,6 @@ public class QiNiuUtils {
 	 */
 	private String createUploadToKen(String bucket, String key, Long expired, Map<String, Object> attributes) {
 		Assert.hasText(bucket,"bucket must not be null or empty!");
-		Auth auth = Auth.create(config.getAccessKey(), config.getSecretKey());
 		if (Strings.isNotBlank(key) ) {
 			if (expired != null) {
 				StringMap policy = null;
@@ -137,5 +143,42 @@ public class QiNiuUtils {
 			return auth.uploadToken(bucket, key);
 		}  
 		return auth.uploadToken(bucket);
+	}
+	
+	/**
+	 * 删除七牛文件
+	 * @param bucket
+	 * @param fileKeys
+	 * @return 
+	 */
+	public Response remove(String bucket, List<String> fileKeys) {
+		Response r = null;
+		if (Lists.isNotEmpty(fileKeys)) {
+			if(Strings.isBlank(bucket)){
+				bucket=config.getDefaultBucket();
+			}
+			for (String key : fileKeys) {
+				if(key.contains(config.getDomain())){
+					key=key.split(config.getDomain())[1];
+				}
+				try {
+					r = bucketManager.delete(bucket, key);
+				} catch (QiniuException e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		}
+		return r;
+	}
+	
+	/**
+	 * 七牛初始化
+	 * @param config
+	 */
+	private void init(Config config) {
+		auth = Auth.create(config.getAccessKey(), config.getSecretKey());
+		cfg=new Configuration(Zone.zone0());
+		uploadManager=new UploadManager(cfg);
+		bucketManager = new BucketManager(auth, cfg);
 	}
 }

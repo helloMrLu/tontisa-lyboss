@@ -6,4 +6,6 @@ public interface UserServer {
 	public User getInfo(Long id);
 
 	public User getUser(User user);
+
+	public User registerUser(User u);
 }

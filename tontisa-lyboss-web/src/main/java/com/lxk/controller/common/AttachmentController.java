@@ -17,6 +17,8 @@ import com.lxk.could.qiniu.UploadStatus;
 import com.lxk.util.Exception;
 import com.lxk.util.FileUtil;
 import com.lxk.util.ResultUtil;
+import com.qiniu.http.Response;
+import com.tontisa.common.collection.Lists;
 import com.tontisa.common.lang.Dates;
 import com.tontisa.common.lang.Strings;
 /**
@@ -53,7 +55,7 @@ public class AttachmentController extends BaseController {
 	@SuppressWarnings({ "rawtypes", "unused" })
 	@RequestMapping(value="/attachUpload")
 	@ResponseBody
-	public String uploadTest(String bucket,String prefix,Long expired, Map<String,Object> attributes,String path) {
+	public Result uploadTest(String bucket,String prefix,Long expired, Map<String,Object> attributes,String path) {
 		if(Strings.isEmpty(path)){
 			//path="C:\\Users\\PVer\\Pictures\\Camera Roll\\123.jpg";
 			path="https://cdn.op114.com/compose/2017-11-22/3f3d8d8d81174d5cb680698ad987b200.jpg";
@@ -81,19 +83,26 @@ public class AttachmentController extends BaseController {
 			UploadStatus s=qu.upload(bucket,prefix,b);
 			qiniuUrl = qu.getFileURL(prefix);
 		}
-		return qiniuUrl;
+		return ResultUtil.success(qiniuUrl);
 	}
 	
 	
 	
 	
-/*	@RequestMapping(value="/file/delete",method=RequestMethod.POST)
+	@RequestMapping(value="/file/delete")
 	@ResponseBody
-	public JSON deleteUploadedFile(String bucket,String key) {
-		if (Strings.isNoneBlank(bucket,key))
-			cloudStorer.remove(bucket, Lists.of(key.split(",")));
-		return success();
-	}*/
+	public Result deleteUploadedFile(String bucket,String key) {
+		Response r = null;
+		if(Strings.isEmpty(key)){
+			//key="http://p7dluzko9.bkt.clouddn.com/compose/2018-04-19/7c205fbf0d2e4ef0903b709ed6d93726.jpg";
+			throw Exception.makeServiceException("20009");
+		}
+		if (Strings.isNoneBlank(key)){
+			QiNiuUtils qu=new QiNiuUtils(config);
+			r= qu.remove(bucket, Lists.of(key.split(",")));
+		}
+		return r==null?ResultUtil.error(500, "删除失败"):ResultUtil.success();
+	}
 }
 
 

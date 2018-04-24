@@ -2,7 +2,7 @@ package com.lxk.util;
 
 import java.util.UUID;
 
-public class TtxRandomUtils {
+public class MyRandomUtils {
 
 	/**
 	 * uuit

@@ -6,13 +6,13 @@ import java.security.NoSuchAlgorithmException;
 import com.lxk.constant.MagConstant;
 
 
-public class TtxMD5 {
+public class MyMD5 {
 
 	 // 全局数组
     private final static String[] strDigits = { "0", "1", "2", "3", "4", "5",
             "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
 
-    public TtxMD5() {
+    public MyMD5() {
     }
 
     // 返回形式为数字跟字符串
@@ -60,10 +60,10 @@ public class TtxMD5 {
     }
 
     public static void main(String[] args) {
-    	TtxMD5 getMD5 = new TtxMD5();
+    	MyMD5 getMD5 = new MyMD5();
     	/* System.out.println(getMD5.getMD5Code("001111"));
         System.out.println(getMD5.getMD5Code("001111"));*/
-    	String salt = TtxRandomUtils.getRandomString(MagConstant.SALT_LENGHT);
+    	String salt = MyRandomUtils.getRandomString(MagConstant.SALT_LENGHT);
     	System.out.println(salt);
     	String password = getMD5.getMD5Code("13825261158" + salt);
     	System.out.println(password);
